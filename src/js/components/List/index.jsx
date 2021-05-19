@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import React, { useEffect, useState } from "react";
 
 import ListItem from "../ListItem";
@@ -9,7 +10,7 @@ const LOREM_IPSUM =
 const List = () => {
   const [list, setList] = useState([
     {
-      id: 0,
+      id: nanoid(),
       img: 0,
       text: LOREM_IPSUM,
     },
@@ -20,7 +21,7 @@ const List = () => {
     setTimeout(() => {
       setList([
         {
-          id: Math.random() * 100000000,
+          id: nanoid(),
           img: Math.ceil(Math.random() * 8),
           text: LOREM_IPSUM.slice(Math.ceil(Math.random() * 100)),
         },

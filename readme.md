@@ -31,6 +31,7 @@ If you want to view the solution, checkout into the `solution` branch.
 
 ```
 git checkout solution
+npm install
 npm run start
 ```
 
