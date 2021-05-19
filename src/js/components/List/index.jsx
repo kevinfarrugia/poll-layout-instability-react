@@ -33,10 +33,7 @@ const List = () => {
     <section>
       <ul id="list" className="mx-auto max-w-sm p-4 space-y-4">
         {list &&
-          list.map((n) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <ListItem key={n.id} img={n.img} text={n.text} />
-          ))}
+          list.map((n) => <ListItem key={n.id} img={n.img} text={n.text} />)}
       </ul>
     </section>
   );
