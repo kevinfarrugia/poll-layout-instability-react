@@ -2,6 +2,8 @@
 
 The scope of this demo is a continuation of the work done on [poll-layout-instability](https://github.com/kevinfarrugia/poll-layout-instability) to illustrate the problem with layout shifting caused by appending DOM elements above the contents in the user's viewport within a ReactJS application.
 
+https://user-images.githubusercontent.com/8075326/118809145-87f71480-b8aa-11eb-9ab2-e5d8dbe438ff.mp4
+
 ## Conclusion
 
 This PR illustrates the solution to the layout instability issue caused when adding items to a React list.
