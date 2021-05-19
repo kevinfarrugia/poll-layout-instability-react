@@ -7,9 +7,7 @@ import path from "path";
 
 import CompressionPlugin from "compression-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
-import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import OptimizeCssAssetsPlugin from "optimize-css-assets-webpack-plugin";
-import StyleLintPlugin from "stylelint-webpack-plugin";
 import TerserJSPlugin from "terser-webpack-plugin";
 import webpack from "webpack";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
@@ -21,9 +19,6 @@ import pkg from "../package.json";
 const ROOT_DIR = path.resolve(__dirname, "..");
 const SRC_DIR = path.resolve(ROOT_DIR, "src");
 const OUTPUT_DIR = path.resolve(ROOT_DIR, "build");
-
-// configure env variable if assets are served from different domain
-const CDN_URL = process.env.CDN_URL || "";
 
 // the total number of routes which are loaded async using dynamic-import
 const NUMBER_OF_ASYNC_ROUTES = 1;
@@ -54,12 +49,6 @@ const splitChunksConfig = {
     cacheGroups: {
       default: false,
       vendors: false,
-      criticalStyles: {
-        enforce: true,
-        name: "critical",
-        test: /critical\.(sa|sc|c)ss$/,
-        chunks: "initial",
-      },
       framework: {
         chunks: "all",
         name: "framework",
@@ -158,7 +147,7 @@ const config = {
         },
       },
       {
-        test: /\.(sa|sc|c)ss$/,
+        test: /\.css$/,
         rules: [
           {
             exclude: SRC_DIR,
@@ -168,42 +157,7 @@ const config = {
             },
           },
           {
-            include: SRC_DIR,
-            loader: "css-loader",
-            options: {
-              modules: {
-                localIdentName: isDevelopment
-                  ? "[name]-[local]-[hash:base64:5]"
-                  : "[hash:base64:5]",
-              },
-              importLoaders: 1,
-              sourceMap: isDevelopment,
-              localsConvention: "camelCaseOnly",
-            },
-          },
-          {
             loader: "postcss-loader",
-          },
-          {
-            loader: "resolve-url-loader",
-          },
-          {
-            test: /\.(scss|sass)$/,
-            loader: "sass-loader",
-            options: {
-              sassOptions: {
-                includePaths: [path.resolve(SRC_DIR, "scss")],
-              },
-            },
-          },
-          {
-            loader: "sass-resources-loader",
-            options: {
-              resources: [
-                path.resolve(SRC_DIR, "scss", "vars.scss"),
-                path.resolve(SRC_DIR, "scss", "mixins.scss"),
-              ],
-            },
           },
         ],
       },
@@ -243,14 +197,6 @@ const config = {
       "process.env.NAME": JSON.stringify(pkg.name),
       "process.env.DESCRIPTION": JSON.stringify(pkg.description),
       "process.env.VERSION": JSON.stringify(pkg.version),
-      "process.env.CDN_URL": JSON.stringify(CDN_URL),
-    }),
-    new StyleLintPlugin({ fix: true }),
-    new MiniCssExtractPlugin({
-      filename: `${isDevelopment ? "[name].css" : "[name].[contentHash].css"}`,
-      chunkFilename: `${
-        isDevelopment ? "[name].css" : "[name].[contentHash].css"
-      }`,
     }),
   ],
 };
@@ -273,10 +219,7 @@ const clientConfig = {
         test: /\.(sa|sc|c)ss$/,
         rules: [
           {
-            // style-loader causes a FOUC but allows HMR for styles - if you don't require HMR it may be replaced by MiniCssExtractPlugin.loader
-            loader: isDevelopment
-              ? "style-loader"
-              : MiniCssExtractPlugin.loader,
+            loader: "style-loader",
           },
         ],
       },
@@ -468,14 +411,6 @@ const serverConfig = {
   module: {
     ...config.module,
     rules: [
-      {
-        test: /\.(sa|sc|c)ss$/,
-        rules: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
-        ],
-      },
       {
         test: /\.(js|jsx)$/,
         include: [SRC_DIR, path.resolve(ROOT_DIR, "scripts")],
