@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import React, { useEffect, useState } from "react";
 
 import ListItem from "../ListItem";
@@ -9,6 +10,7 @@ const LOREM_IPSUM =
 const List = () => {
   const [list, setList] = useState([
     {
+      id: nanoid(),
       img: 0,
       text: LOREM_IPSUM,
     },
@@ -19,6 +21,7 @@ const List = () => {
     setTimeout(() => {
       setList([
         {
+          id: nanoid(),
           img: Math.ceil(Math.random() * 8),
           text: LOREM_IPSUM.slice(Math.ceil(Math.random() * 100)),
         },
@@ -31,10 +34,7 @@ const List = () => {
     <section>
       <ul id="list" className="mx-auto max-w-sm p-4 space-y-4">
         {list &&
-          list.map((n, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <ListItem key={index} img={n.img} text={n.text} />
-          ))}
+          list.map((n) => <ListItem key={n.id} img={n.img} text={n.text} />)}
       </ul>
     </section>
   );
